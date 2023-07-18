@@ -18,9 +18,8 @@ export class ApiController {
         
         // console.log("dddddkkkddddddd");
         console.log(`${JSON.stringify(data)}`)
-        return {"nom" : "mohamed", "prenon":"dhouib"};
 
-      //  return `POST request with data: ${JSON.stringify(data)}`;
+       return `POST request with data: ${JSON.stringify(data)}`;
     }
 
     @Put(':id')
