@@ -13,9 +13,14 @@ export class ApiController {
 
         return `GET request with query parameter: query=${JSON.stringify(queryParams)}`;
     }
-    @Post()
-    create(@Body() data: any): string {
-        return `POST request with data: ${JSON.stringify(data)}`;
+    @Post("create")
+    create(@Body() data: any): any {
+        
+        // console.log("dddddkkkddddddd");
+        console.log(`${JSON.stringify(data)}`)
+        return {"nom" : "mohamed", "prenon":"dhouib"};
+
+      //  return `POST request with data: ${JSON.stringify(data)}`;
     }
 
     @Put(':id')
