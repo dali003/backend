@@ -4,7 +4,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import * as swagger from "@nestjs/swagger";
 import * as common from "@nestjs/common";
-import { PostsDto } from './dto/posts.dto';
+
 
 @Controller('post')
 export class PostController {
@@ -22,17 +22,7 @@ export class PostController {
     }
 }
 
-@swagger.ApiOkResponse({
-  schema: {
-    type: 'object',
-    properties: {
-      data: {
-        $ref: swagger.getSchemaPath(PostsDto),
-      },
-    },
-  },
-  description: '200. Success. Returns properties ',
-})
+
   @Get("findAllPosts")
   findAll() {
     console.log("api")
