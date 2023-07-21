@@ -2,33 +2,57 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import * as swagger from "@nestjs/swagger";
+import * as common from "@nestjs/common";
+import { PostsDto } from './dto/posts.dto';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
+  @Post("create")
+  @common.UsePipes(new common.ValidationPipe({ transform: true }))
+  @swagger.ApiBody({type:CreatePostDto})
+  @swagger.ApiCreatedResponse({type:CreatePostDto})
+  create(@Body() data : CreatePostDto): any{
+    try {
+      const resp =  this.postService.create(data);
+      return resp;
+    } catch (error) {
+      throw new common.NotFoundException;
+    }
+}
 
-  @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
-  }
-
-  @Get('post/findall')
+@swagger.ApiOkResponse({
+  schema: {
+    type: 'object',
+    properties: {
+      data: {
+        $ref: swagger.getSchemaPath(PostsDto),
+      },
+    },
+  },
+  description: '200. Success. Returns properties ',
+})
+  @Get("findAllPosts")
   findAll() {
+    console.log("api")
     return this.postService.findAll();
   }
+ 
 
-  @Get('post/findone:id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @Get('/find/:id')
+  findOne(@Param('id') id: Number) {
+    console.log(typeof id);
+    return this.postService.findOne(id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+   
+  @swagger.ApiCreatedResponse({type:UpdatePostDto})
+  @Patch('update/:id')
+  update(@Param('id') id: number, @Body() updatePostDto: UpdatePostDto) {
+    return this.postService.update(id, updatePostDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  @Delete('delete/:id')
+  deletePost(@Param('id') id: number) {
+    return this.postService.deletePost(id);
   }
-}
+  }
